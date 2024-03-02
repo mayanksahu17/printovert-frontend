@@ -1,51 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { updateProfile } from '../../actions/auth.js';
-import store from '../../store/store.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../store/authSlice.js';
+
 function EditProfile() {
+  const user = useSelector(state => state.auth.user);
+  const dispatch = useDispatch();
 
-  const user = store.getState().auth.user;
-  const userId = user?._id;
-  const dispatch = useDispatch()
-  const [loading , setLoading] = useState(false)
-  const [name, setName] = useState(user?.fullName || '');
-  const [email, setEmail] = useState(user?.email || '');
-  const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber || '');
-  const [address, setAddress] = useState(user?.address || '');
-  const [message,setMessage] = useState("")
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
+  const [message, setMessage] = useState('');
 
-  try {
-    setLoading(true)
-    const updateuserProfile = async () => {
-      console.log(user);
-      const userData = {
-        fullName : name,
-        email,
-        phoneNumber,
-        address,
-      };
-      console.log(userData);
-      const response = await updateProfile(userId, userData);
-  
+  useEffect(() => {
+    if (user) {
+      setName(user.fullName || '');
+      setEmail(user.email || '');
+      setPhoneNumber(user.phoneNumber || '');
+      setAddress(user.address || '');
+    }
+  }, [user]);
+
+  const updateUserProfile = async () => {
+    setLoading(true);
+    try {
+      const userData = { fullName: name, email, phoneNumber, address };
+      const response = await updateProfile(user._id, userData);
+
       if (response) {
-        console.log('Profile updated successfully:', response);
-        dispatch(login({user : response.data}))
-        setMessage("Profile updated successfully:")
-        
-        // Handle success (e.g., show a success message)
+        dispatch(login({ user: response.data }));
+        setMessage('Profile updated successfully');
       } else {
         console.error('Failed to update profile');
-        setMessage("Failed to update profile")
-        // Handle failure (e.g., show an error message)
+        setMessage('Failed to update profile');
       }
-    };
-  } catch (error) {
-    console.log(error);
-    throw new Error(error.message);
-  }finally{
-    setLoading(false)
-  }
+    } catch (error) {
+      console.error('Error updating profile:', error.message);
+      setMessage('Error updating profile');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className='bg-blue-200 w-full h-180'>
@@ -121,7 +118,7 @@ function EditProfile() {
         {message &&(<p className='font-semibold text-xl'>{message}</p>)}
         <button
           className='h-10 w-40 rounded-3xl text-white ml-10 border bg-blue-700 hover:bg-blue-500 hover:text-white font-semibold'
-          onClick={updateuserProfile}
+          onClick={updateUserProfile}
         >
           {loading? "Loading..." : "Update profile"}
         </button>
