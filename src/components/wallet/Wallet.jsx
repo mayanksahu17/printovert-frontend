@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import store from '../../store/store.js'
 import {getAllUserTransactions} from '../../actions/transections.js'
 import TransactionItem from './TransactionItem.jsx';
@@ -10,7 +10,13 @@ function Wallet() {
   let spent = user?.spent || 0
   const userId = user?._id
 
-  useEffect(() => {
+const navigate = useNavigate()
+
+
+useEffect(() => {
+  if (!user) {
+    navigate("/login");
+}
     // Fetch user transactions when the component mounts
     const fetchTransactions = async () => {
       try {
@@ -74,7 +80,7 @@ function Wallet() {
 
       </div>
       <div className='ml-5 -mt-14 text-3xl font-bold'>
-        RS 400
+      {wallet}
       </div>
       </div>
 

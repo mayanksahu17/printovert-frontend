@@ -144,7 +144,7 @@ const Backdesigner = () => {
 
     if(!isAuthenticated){
      
-      navigate('login')
+      navigate('/login')
     }else{
       
     const reader = new FileReader();
@@ -241,7 +241,7 @@ const Backdesigner = () => {
             const imageUploader = new ImageUploader();
             imageUploader.imageUpload({
               file: blob,
-              name: 'frontimage',
+              name: 'backimage',
             });
           }
         }, 'image/png');

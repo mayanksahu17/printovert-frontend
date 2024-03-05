@@ -143,7 +143,7 @@ const Rightdesigner = () => {
 
     if(!isAuthenticated){
      
-      navigate('login')
+      navigate('/login')
     }else{
       
     const reader = new FileReader();
@@ -240,7 +240,7 @@ const Rightdesigner = () => {
             const imageUploader = new ImageUploader();
             imageUploader.imageUpload({
               file: blob,
-              name: 'frontimage',
+              name: 'rightimage',
             });
           }
         }, 'image/png');

@@ -147,7 +147,7 @@ const Leftdesigner = () => {
 
     if(!isAuthenticated){
      
-      navigate('login')
+      navigate('/login')
     }else{
       
     const reader = new FileReader();
@@ -245,7 +245,7 @@ const Leftdesigner = () => {
             const imageUploader = new ImageUploader();
             imageUploader.imageUpload({
               file: blob,
-              name: 'frontimage',
+              name: 'leftimage',
             });
           }
         }, 'image/png');
